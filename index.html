@@ -13,7 +13,7 @@
     <header class="topbar">
       <div>
         <span class="brand">Bolão Copa 2026 ⚽</span>
-        <p class="subtitle">Cronograma oficial, palpites e ranking para jogar com seus amigos na arena digital.</p>
+        <p class="subtitle">Cronograma oficial, palpites e ranking da disputa exclusiva entre Gé e Gui.</p>
       </div>
       <div class="hero-badge">Copa do Mundo 2026 • Torcida unida</div>
     </header>
@@ -58,8 +58,8 @@
       <section id="participants" class="panel">
         <div class="panel-header">
           <div>
-            <h2>Cadastro de participantes</h2>
-            <p>Adicione quem vai participar do bolão e mantenha o grupo organizado.</p>
+            <h2>Participantes: Gé e Gui</h2>
+            <p>Gé e Gui já estão cadastrados. Use este formulário apenas para ajustar apelidos ou corrigir detalhes.</p>
           </div>
         </div>
         <form id="participantForm" class="card form-card">
@@ -75,7 +75,7 @@
             <label>Apelido</label>
             <input id="participantNickname" placeholder="Como será exibido" />
           </div>
-          <button class="button primary" type="submit">Salvar participante</button>
+          <button class="button primary" type="submit">Adicionar / Atualizar participante</button>
         </form>
         <div class="card table-card">
           <h3>Participantes cadastrados</h3>
@@ -99,14 +99,19 @@
             <label>Jogo</label>
             <select id="predictionMatch" required></select>
           </div>
-          <div class="field-row small-row">
-            <label>Mandante</label>
-            <input id="predictionHome" type="number" min="0" placeholder="Gols" required />
+          <div class="match-summary">
+            <span>Jogo escolhido:</span>
+            <strong id="selectedMatchText">Selecione um jogo para ver mandante e visitante</strong>
           </div>
           <div class="field-row small-row">
-            <label>Visitante</label>
-            <input id="predictionAway" type="number" min="0" placeholder="Gols" required />
+            <label>Gols do mandante</label>
+            <input id="predictionHome" type="number" min="0" placeholder="Ex: 2" required />
           </div>
+          <div class="field-row small-row">
+            <label>Gols do visitante</label>
+            <input id="predictionAway" type="number" min="0" placeholder="Ex: 1" required />
+          </div>
+          <div class="helper-text">Use os campos acima para inserir o placar do mandante e do visitante conforme o jogo selecionado.</div>
           <button class="button primary" type="submit">Salvar palpite</button>
         </form>
         <div class="table-wrapper">
@@ -136,6 +141,10 @@
             <label class="button tertiary" for="importFile">Importar bolão</label>
             <input id="importFile" type="file" accept="application/json" hidden />
           </div>
+        </div>
+        <div class="prize-banner">
+          <span>🏆 Prêmio do Bolão</span>
+          <p>Quem terminar em último paga o sorvete. Se houver empate na pontuação, os dois empatam a colocação e quem tiver menos acertos do exato perde a aposta.</p>
         </div>
         <div class="scorecards" id="scoreCards"></div>
         <div class="table-wrapper">

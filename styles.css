@@ -1,8 +1,8 @@
 :root {
   color-scheme: dark;
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #0b1320;
-  color: #e8f0ff;
+  background: #061e16;
+  color: #f8f8f2;
   font-size: 16px;
   line-height: 1.5;
 }
@@ -14,8 +14,11 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: radial-gradient(circle at top, rgba(84, 177, 255, 0.18), transparent 30%),
-    linear-gradient(180deg, #081021 0%, #0f1f36 45%, #0b1320 100%);
+  background-color: #061e16;
+  background-image:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.08), transparent 18%),
+    linear-gradient(180deg, rgba(14, 90, 48, 0.18), rgba(5, 31, 18, 0.98)),
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.04) 1px, transparent 1px, transparent 50px);
 }
 
 button,
@@ -35,20 +38,22 @@ select {
   gap: 18px;
   padding: 28px 30px;
   border-radius: 24px;
-  background: rgba(255, 255, 255, 0.04);
+  background: linear-gradient(180deg, rgba(12, 92, 41, 0.9), rgba(7, 44, 22, 0.88));
   border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(16px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
 }
 
 .brand {
   display: block;
   font-size: clamp(1.75rem, 2.4vw, 2.4rem);
-  font-weight: 700;
+  font-weight: 800;
+  color: #f8f1ae;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.25);
 }
 
 .subtitle {
   margin: 10px 0 0;
-  color: #b8ccff;
+  color: #d8e8b8;
   max-width: 760px;
 }
 
@@ -57,10 +62,11 @@ select {
   justify-self: end;
   padding: 12px 18px;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(12, 83, 189, 0.14);
-  color: #cce5ff;
-  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(251, 215, 71, 0.1);
+  color: #fff9d6;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 .tabs {
@@ -82,7 +88,8 @@ select {
 
 .tab-button:hover,
 .tab-button.active {
-  background: rgba(56, 147, 255, 0.22);
+  background: rgba(247, 206, 70, 0.22);
+  color: #fff;
   transform: translateY(-1px);
 }
 
@@ -132,8 +139,8 @@ input[type="email"] {
   min-width: 160px;
   border-radius: 14px;
   border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.05);
-  color: #eef4ff;
+  background: rgba(255, 255, 255, 0.06);
+  color: #071808;
   padding: 12px 14px;
   outline: none;
 }
@@ -147,8 +154,9 @@ select:focus {
 .table-wrapper {
   overflow: auto;
   border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: inset 0 0 0 1px rgba(176, 227, 167, 0.12);
 }
 
 table {
@@ -181,8 +189,9 @@ td {
 .card {
   padding: 22px;
   border-radius: 24px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(22, 67, 34, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
 }
 
 .form-card {
@@ -197,6 +206,37 @@ td {
 
 .small-row {
   max-width: 220px;
+}
+
+.match-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: rgba(251, 215, 71, 0.08);
+  border: 1px solid rgba(251, 215, 71, 0.15);
+  color: #fff9d6;
+  margin-bottom: 10px;
+}
+
+.match-summary span {
+  font-size: 0.95rem;
+  opacity: 0.8;
+}
+
+.match-summary strong {
+  font-size: 1rem;
+  color: #fff;
+}
+
+.helper-text {
+  color: #dfe8c0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  padding: 0 2px 4px;
+  margin-top: -8px;
+  margin-bottom: 16px;
 }
 
 .button {
@@ -216,18 +256,18 @@ td {
 }
 
 .primary {
-  background: linear-gradient(135deg, #4ea8ff 0%, #0077ff 100%);
-  color: #fff;
+  background: linear-gradient(135deg, #f9d94b 0%, #f08f0d 100%);
+  color: #10210a;
 }
 
 .secondary {
-  background: rgba(255, 255, 255, 0.08);
-  color: #d6e3ff;
+  background: rgba(255, 255, 255, 0.12);
+  color: #edf5e3;
 }
 
 .tertiary {
-  background: rgba(14, 57, 105, 0.78);
-  color: #b6d4ff;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fdfadc;
 }
 
 .list-block {
@@ -258,6 +298,30 @@ td {
   flex-wrap: wrap;
 }
 
+.prize-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px 22px;
+  border-radius: 20px;
+  background: rgba(248, 205, 67, 0.14);
+  border: 1px solid rgba(248, 205, 67, 0.28);
+  color: #fffbe3;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.14);
+  margin-bottom: 18px;
+}
+
+.prize-banner span {
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.prize-banner p {
+  margin: 0;
+  color: #f8f4d0;
+  line-height: 1.5;
+}
+
 .scorecards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -268,29 +332,30 @@ td {
 .scorecard {
   padding: 18px;
   border-radius: 20px;
-  background: rgba(13, 63, 139, 0.22);
-  border: 1px solid rgba(112, 174, 255, 0.18);
+  background: rgba(28, 93, 40, 0.95);
+  border: 1px solid rgba(247, 206, 70, 0.22);
 }
 
 .scorecard h4 {
   margin: 0 0 8px;
   font-size: 0.95rem;
-  color: #b8d8ff;
+  color: #f7f0c2;
 }
 
 .scorecard strong {
   font-size: 1.85rem;
   display: block;
   margin-top: 10px;
+  color: #fff;
 }
 
 .bottom-note {
   margin-top: 16px;
   padding: 18px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px dashed rgba(255, 255, 255, 0.14);
-  color: #c9d9ff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px dashed rgba(247, 206, 70, 0.28);
+  color: #fff8d4;
 }
 
 @media (max-width: 900px) {

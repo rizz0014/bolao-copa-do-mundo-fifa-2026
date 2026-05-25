@@ -107,6 +107,86 @@ const matchData = [
   { id: 104, date: '2026-07-19', stage: 'Final', home: 'W101', away: 'W102', venue: 'MetLife Stadium', timezone: 'UTC-4' },
 ];
 
+const teamTranslations = {
+  'Mexico': 'México',
+  'South Africa': 'África do Sul',
+  'South Korea': 'Coreia do Sul',
+  'Czech Republic': 'República Tcheca',
+  'Canada': 'Canadá',
+  'Bosnia and Herzegovina': 'Bósnia e Herzegovina',
+  'United States': 'Estados Unidos',
+  'Paraguay': 'Paraguai',
+  'Haiti': 'Haiti',
+  'Scotland': 'Escócia',
+  'Australia': 'Austrália',
+  'Turkey': 'Turquia',
+  'Brazil': 'Brasil',
+  'Morocco': 'Marrocos',
+  'Qatar': 'Catar',
+  'Switzerland': 'Suíça',
+  'Ivory Coast': 'Costa do Marfim',
+  'Ecuador': 'Equador',
+  'Germany': 'Alemanha',
+  'Curaçao': 'Curaçao',
+  'Netherlands': 'Holanda',
+  'Japan': 'Japão',
+  'Sweden': 'Suécia',
+  'Tunisia': 'Tunísia',
+  'Saudi Arabia': 'Arábia Saudita',
+  'Uruguay': 'Uruguai',
+  'Spain': 'Espanha',
+  'Cape Verde': 'Cabo Verde',
+  'Iran': 'Irã',
+  'New Zealand': 'Nova Zelândia',
+  'Belgium': 'Bélgica',
+  'Egypt': 'Egito',
+  'France': 'França',
+  'Senegal': 'Senegal',
+  'Iraq': 'Iraque',
+  'Norway': 'Noruega',
+  'Argentina': 'Argentina',
+  'Algeria': 'Argélia',
+  'Austria': 'Áustria',
+  'Jordan': 'Jordânia',
+  'Ghana': 'Gana',
+  'Panama': 'Panamá',
+  'England': 'Inglaterra',
+  'Croatia': 'Croácia',
+  'Portugal': 'Portugal',
+  'DR Congo': 'RD Congo',
+  'Uzbekistan': 'Uzbequistão',
+  'Colombia': 'Colômbia',
+};
+
+const stageTranslations = {
+  'Group A': 'Grupo A',
+  'Group B': 'Grupo B',
+  'Group C': 'Grupo C',
+  'Group D': 'Grupo D',
+  'Group E': 'Grupo E',
+  'Group F': 'Grupo F',
+  'Group G': 'Grupo G',
+  'Group H': 'Grupo H',
+  'Group I': 'Grupo I',
+  'Group J': 'Grupo J',
+  'Group K': 'Grupo K',
+  'Group L': 'Grupo L',
+  'Round of 32': 'Oitavas de Final',
+  'Round of 16': 'Oitavas de Final',
+  'Quarterfinal': 'Quartas de Final',
+  'Semifinal': 'Semifinal',
+  'Third place': '3º Lugar',
+  'Final': 'Final',
+};
+
+function translateTeam(name) {
+  return teamTranslations[name] || name;
+}
+
+function translateStage(stage) {
+  return stageTranslations[stage] || stage;
+}
+
 const elements = {
   tabs: document.querySelectorAll('.tab-button'),
   panels: document.querySelectorAll('.panel'),
@@ -121,6 +201,7 @@ const elements = {
   predictionForm: document.getElementById('predictionForm'),
   predictionParticipant: document.getElementById('predictionParticipant'),
   predictionMatch: document.getElementById('predictionMatch'),
+  selectedMatchText: document.getElementById('selectedMatchText'),
   predictionHome: document.getElementById('predictionHome'),
   predictionAway: document.getElementById('predictionAway'),
   predictionsTable: document.getElementById('predictionsTable'),
@@ -136,16 +217,29 @@ let state = {
   results: [],
 };
 
+function defaultParticipants() {
+  return [
+    { id: 1, name: 'Gé', email: '', nickname: 'Gé' },
+    { id: 2, name: 'Gui', email: '', nickname: 'Gui' },
+  ];
+}
+
 function loadState() {
   const stored = localStorage.getItem(STORAGE_KEY);
   if (stored) {
     try {
       state = JSON.parse(stored);
+      state.participants = Array.isArray(state.participants) && state.participants.length > 0
+        ? state.participants
+        : defaultParticipants();
+      state.predictions = Array.isArray(state.predictions) ? state.predictions : [];
+      state.results = Array.isArray(state.results) ? state.results : [];
       return;
     } catch (error) {
       console.warn('Falha ao ler dados do bolão:', error);
     }
   }
+  state = { participants: defaultParticipants(), predictions: [], results: [] };
   saveState();
 }
 
@@ -160,6 +254,20 @@ function formatDate(value) {
 
 function getResult(matchId) {
   return state.results.find((result) => result.matchId === matchId) || null;
+}
+
+function getMatchById(matchId) {
+  return matchData.find((match) => match.id === matchId) || null;
+}
+
+function updateMatchSummary() {
+  const matchId = Number(elements.predictionMatch.value);
+  const match = getMatchById(matchId);
+  if (!match) {
+    elements.selectedMatchText.textContent = 'Selecione um jogo para ver mandante e visitante';
+    return;
+  }
+  elements.selectedMatchText.textContent = `${translateTeam(match.home)} (mandante) x ${translateTeam(match.away)} (visitante)`;
 }
 
 function recordMatch(matchId, home, away) {
@@ -200,7 +308,7 @@ function renderTab(tabName) {
 function renderStageOptions() {
   const stages = Array.from(new Set(matchData.map((match) => match.stage)));
   elements.stageFilter.innerHTML = '<option value="all">Todas as fases</option>' + stages
-    .map((stage) => `<option value="${stage}">${stage}</option>`)
+    .map((stage) => `<option value="${stage}">${translateStage(stage)}</option>`)
     .join('');
 }
 
@@ -216,14 +324,16 @@ function renderCalendar() {
     .sort((a, b) => new Date(a.date) - new Date(b.date) || a.id - b.id)
     .map((match) => {
       const result = getResult(match.id);
+      const home = translateTeam(match.home);
+      const away = translateTeam(match.away);
       const resultText = result ? `${result.home} x ${result.away}` : '-';
       return `
         <tr>
           <td>${match.id}</td>
           <td>${formatDate(match.date)}</td>
-          <td>${match.stage}</td>
-          <td>${match.home}</td>
-          <td>${match.away}</td>
+          <td>${translateStage(match.stage)}</td>
+          <td>${home}</td>
+          <td>${away}</td>
           <td>${match.venue}</td>
           <td>
             <div class="field-row small-row">
@@ -271,7 +381,11 @@ function renderParticipants() {
 
 function renderPredictions() {
   elements.predictionMatch.innerHTML = matchData
-    .map((match) => `<option value="${match.id}">#${match.id} • ${match.home} x ${match.away}</option>`)
+    .map((match) => {
+      const home = translateTeam(match.home);
+      const away = translateTeam(match.away);
+      return `<option value="${match.id}">#${match.id} • ${home} x ${away}</option>`;
+    })
     .join('');
 
   const rows = state.predictions
@@ -321,16 +435,24 @@ function computeRanking() {
 
 function renderRanking() {
   const ranking = computeRanking();
+  const scoreCount = ranking.reduce((acc, player) => {
+    acc[player.total] = (acc[player.total] || 0) + 1;
+    return acc;
+  }, {});
+
   elements.rankingTable.innerHTML = ranking
-    .map((player, index) => `
+    .map((player, index) => {
+      const positionLabel = scoreCount[player.total] > 1 ? 'Empate' : index + 1;
+      return `
       <tr>
-        <td>${index + 1}</td>
+        <td>${positionLabel}</td>
         <td>${player.name}</td>
         <td>${player.total}</td>
         <td>${player.exacts}</td>
         <td>${player.corrects}</td>
       </tr>
-    `)
+    `;
+    })
     .join('') || '<tr><td colspan="5">Ainda não há pontos registrados.</td></tr>';
 
   elements.scoreCards.innerHTML = ranking.slice(0, 3)
@@ -434,6 +556,7 @@ function setupEvents() {
   elements.teamSearch.addEventListener('input', renderCalendar);
   elements.participantForm.addEventListener('submit', addParticipant);
   elements.predictionForm.addEventListener('submit', addPrediction);
+  elements.predictionMatch.addEventListener('change', updateMatchSummary);
   elements.exportButton.addEventListener('click', exportData);
   elements.importFile.addEventListener('change', importData);
 }
@@ -441,3 +564,4 @@ function setupEvents() {
 loadState();
 setupEvents();
 renderAll();
+updateMatchSummary();

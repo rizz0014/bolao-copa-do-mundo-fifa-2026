@@ -1,0 +1,10 @@
+{
+  "participants": [
+    { "id": 1, "name": "Gé", "email": "", "nickname": "Gé" },
+    { "id": 2, "name": "Gui", "email": "", "nickname": "Gui" }
+  ],
+  "predictions": [],
+  "results": [],
+  "timezoneMode": "br",
+  "calendarView": "grid"
+}
